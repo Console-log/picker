@@ -1,0 +1,15 @@
+{
+  "name": "picker",
+  "version": "1.0.0",
+  "description": "picker",
+  "main": "picker.js",
+  "scripts": {
+    "start": "gulp reload"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "browser-sync": "^2.18.6",
+    "gulp": "^3.9.1"
+  }
+}

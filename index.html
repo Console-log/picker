@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Picker</title>
+    <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+    <div style="position: fixed;top:100px;left: 200px;margin-top:30px;">
+        <div style="position: absolute;top:10px;left:10px;margin-top:20px;">
+            <div style="margin-left: 20px;margin-top: 50px;">
+                <input type="text" id="picker"/>
+            </div>
+        </div>
+    </div>
+
+    <script src="./picker.js"></script>
+    <script>
+        !function(){
+            var ipt=document.getElementById('picker');
+            new Picker(ipt,{
+                break:'-'
+            },function(){
+                console.log(this);
+            });
+        }();
+    </script>
+
+</body>
+</html>
