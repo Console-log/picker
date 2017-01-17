@@ -2,9 +2,8 @@
     function Picker(ipt,config,callback){
         this.ipt=ipt;
         this.config={
-            break:config.break||'-',
-            min_time:config.min_time||'',
-            max_time:config.max_time||''
+            break:config?config.break||'-':'-',
+            max_time:config?config.max_time||'':''
         };
         this.callback=function(){
             if(!callback) return new Function();
@@ -17,17 +16,18 @@
 
         init:function(){
             var _this=this;
+            var max_time=this.config.max_time?this.get_date(new Date(this.config.max_time)):'';
             this.ipt.addEventListener('click',function(){
                 _this.ms=_this.ac_day=this.getAttribute('data-ms')-0;
                 _this.render_dom();
             });
             this.ipt.readOnly=true;
-            this.ipt.value=this.format_date(new Date());
             this.ipt.setAttribute('data-ms',new Date().getTime());
+            this.max_ms=max_time?new Date(max_time.year,max_time.month-1,max_time.date+1).getTime():'';
         },
 
         render_dom:function(){
-            var i,max_day,html,len,day_list=[],active=false;
+            var i,max_day,html,len,day_list=[],active=false,na;
             var position=this.offset();
             var date=this.get_date(this.ms);
             var ac_day=this.get_date(this.ac_day);
@@ -40,7 +40,8 @@
 
             for(i=0;i<day_count;i++){
                 active=date.year==ac_day.year&&date.month==ac_day.month&&ac_day.date==i+1;
-                day_list.push('<span '+(active?'class="active"':'')+' data-ms="'+(new Date(date.year,date.month-1,i+1).getTime())+'">'+(i+1)+'</span>');
+                na=new Date(date.year,date.month-1,i+1).getTime()>=this.max_ms;
+                day_list.push('<span '+(active?'class="active"':na?'class="na"':'')+' data-ms="'+(new Date(date.year,date.month-1,i+1).getTime())+'">'+(i+1)+'</span>');
             };
 
             day_count=this.get_day_count(date.year,date.month-1);
