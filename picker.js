@@ -3,7 +3,7 @@
         this.ipt=ipt;
         this.config={
             break:config?config.break||'-':'-',
-            max_time:config?config.max_time||'':''
+            max_time:config?config.max_time||new Date().getTime():new Date().getTime()
         };
         this.callback=function(){
             if(!callback) return new Function();
@@ -17,13 +17,15 @@
         init:function(){
             var _this=this;
             var max_time=this.config.max_time?this.get_date(new Date(this.config.max_time)):'';
-            this.ipt.addEventListener('click',function(){
+            this.ipt.addEventListener('click',function(e){
                 _this.ms=_this.ac_day=this.getAttribute('data-ms')-0;
                 _this.render_dom();
+                e.stopPropagation();
             });
             this.ipt.readOnly=true;
             this.ipt.setAttribute('data-ms',new Date().getTime());
             this.max_ms=max_time?new Date(max_time.year,max_time.month-1,max_time.date+1).getTime():'';
+            this.doc_listener=this.doc_listener.bind(this);
         },
 
         render_dom:function(){
@@ -81,6 +83,7 @@
             this.dom.innerHTML=html;
             doc.body.appendChild(this.dom);
             this.add_listener(this.dom);
+            doc.addEventListener('click',this.doc_listener);
         },
 
         get_date:function(ms){
@@ -164,14 +167,27 @@
                 if(tar.tagName.toLocaleLowerCase()=='span'&&tar.parentNode.className=='main_day'&&tar.className!='na'){
                     _this.ipt.value=_this.format_date(tar.getAttribute('data-ms'));
                     _this.ipt.setAttribute('data-ms',tar.getAttribute('data-ms'));
+                    doc.removeEventListener('click',_this.doc_listener);
                     doc.body.removeChild(dom);
                     _this.callback();
                 };
             });
         },
 
+        doc_listener:function(e){
+            var dom=e.target;
+            console.log(dom)
+            while(dom!=doc.body){
+                if(dom.className=='date_picker'){return};
+                dom=dom.parentNode;
+            };
+            doc.removeEventListener('click',this.doc_listener);
+            doc.body.removeChild(this.dom);
+        },
+
         re_render:function(dom){
             doc.body.removeChild(dom);
+            doc.removeEventListener('click',this.doc_listener);
             this.render_dom();
         }
 
