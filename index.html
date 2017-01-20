@@ -22,6 +22,8 @@
             var ipt1=document.getElementById('picker1');
             new Picker(ipt,{
                 break:'-'
+            },function(){
+                console.log(this.time)
             });
 
             new Picker(ipt1,{

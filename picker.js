@@ -160,6 +160,7 @@
                     case 'today':
                         _this.ipt.value=_this.format_date(ac_time);
                         _this.ipt.setAttribute('data-ms',ac_time);
+                        _this.time=Math.floor(ac_time/1000);
                         doc.body.removeChild(dom);
                         _this.callback();
                         break;
@@ -167,6 +168,7 @@
                 if(tar.tagName.toLocaleLowerCase()=='span'&&tar.parentNode.className=='main_day'&&tar.className!='na'){
                     _this.ipt.value=_this.format_date(tar.getAttribute('data-ms'));
                     _this.ipt.setAttribute('data-ms',tar.getAttribute('data-ms'));
+                    _this.time=Math.floor(tar.getAttribute('data-ms')/1000);
                     doc.removeEventListener('click',_this.doc_listener);
                     doc.body.removeChild(dom);
                     _this.callback();
@@ -176,7 +178,6 @@
 
         doc_listener:function(e){
             var dom=e.target;
-            console.log(dom)
             while(dom!=doc.body){
                 if(dom.className=='date_picker'){return};
                 dom=dom.parentNode;
